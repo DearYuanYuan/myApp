@@ -13,7 +13,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import TouchableButton from './button'
 import fontsize from './plug/fontSize'
 import styles from '../style/style'
-let fentchUrl = 'http://139.196.253.89:8080'
+import RNFS from 'react-native-fs';
+let fentchUrl = 'http://140.143.202.114:8080'
 /*
 下列参数都是从Assets.js组件传递来的
 具体的调用要使用 this.props.navigation.state.params+参数名 eg：this.props.navigation.state.params.asset
@@ -31,6 +32,7 @@ export default class AssetsDetail extends React.Component {
         super(props);
         this.state = {
             assetsTransDetail:[],
+            progressNum:'',
         }
       };
     static navigationOptions = {
@@ -77,40 +79,70 @@ export default class AssetsDetail extends React.Component {
         })
         .then((response) => {return response.json()})  
         .then((responseJson) => {
-            // alert(JSON.stringify(responseJson))
-            var promise = CameraRoll.saveToCameraRoll(responseJson.url);
-            promise.then(function(result) {
-                Alert.alert(
-                    '下载成功',
-                    '',
-                    [
-                    { text: '确定', 
-                    //   onPress: () => {
-                    //     const {navigate} = this.props.navigation
-                    //     navigate('Login',{})
-                    //   }
+            var imgTest = /^http.*(png|jpe|jpg|jpeg)$/i
+            var videoTest = /^http.*(mp4|mov|avi|wmv|3gp|mkv|flv|f4v|rmvb|webm|mpeg|mpg|dat|asf|video)$/i
+            
+            // 视频 、图片下载
+            if(imgTest.test(responseJson.url)||videoTest.test(responseJson.url)){
+                const formUrl = responseJson.url;
+                var downloadDest;
+                var fileType ;
+                if(imgTest.test(formUrl)){
+                    downloadDest = `${RNFS.DocumentDirectoryPath}/${((Math.random() * 1000) | 0)}.jpg`;
+                    fileType = 'photo'
+                }else{
+                    downloadDest = `${RNFS.DocumentDirectoryPath}/${((Math.random() * 1000) | 0)}.mp4`;
+                    fileType = 'video'
+                }
+                const options = {
+                    fromUrl: formUrl,
+                    toFile: downloadDest,
+                    background: true,
+                    begin: (res) => {
+                        //开始下载
+                        this.setState({
+                            progressNum: 0.01,
+                        });
+                        // console.log('begin', res);
+                        //console.log('contentLength:', res.contentLength / 1024 / 1024, 'M');
+                    },
+                    progress: (res) => {
+                        //下载中
+                        let pro = res.bytesWritten / res.contentLength;
+                        //下载进度
+                        this.setState({
+                            progressNum: pro,
+                        });
                     }
-                    ],
-                    { cancelable: false }
-                  )
-            }).catch(function(error) {
-                Alert.alert(
-                    '下载失败',
-                    '',
-                    [
-                    { text: '确定', 
-                    //   onPress: () => {
-                    //     const {navigate} = this.props.navigation
-                    //     navigate('Login',{})
-                    //   }
-                    }
-                    ],
-                    { cancelable: false }
-                  )
-            });
+                };
+                try {
+                    const ret = RNFS.downloadFile(options);
+                    ret.promise.then(res => {
+                        // alert(downloadDest)
+                        if(this.state.progressNum==1){
+                            var promise = CameraRoll.saveToCameraRoll(downloadDest,fileType);
+                            promise.then(function(result) {
+                                Alert.alert('下载成功','',[{ text: '确定',}],{ cancelable: false })
+                            }).catch(function(error) {
+                                Alert.alert('服务器繁忙','服务器繁忙，请稍后重试~',[{ text: '确定',}],{ cancelable: false })
+                            }); 
+                        }
+                    }).catch(err => {
+                        Alert.alert('服务器繁忙','服务器繁忙，请稍后重试~',[{ text: '确定',}],{ cancelable: false })
+                    });
+                }
+                catch (e) {
+                    Alert.alert('服务器繁忙','服务器繁忙，请稍后重试~',[{ text: '确定',}],{ cancelable: false })
+                }
+                
+                       
+            }else{
+                Alert.alert('此文件格式不支持下载','暂只支持图片、视频下载',[{ text: '确定',}],{ cancelable: false })
+            }
+
         })
         .catch((error)=>{
-            // alert(JSON.stringify(error))
+            Alert.alert('服务器繁忙','',[{ text: '确定',}],{ cancelable: false })
         })
     }
     render() {
@@ -127,6 +159,30 @@ export default class AssetsDetail extends React.Component {
                     <Text style={assetsDetail.assetsRightContent}>{this.props.navigation.state.params.type}</Text>
                 </View>
                 <View style={assetsDetail.assetsRowList}>
+                    <Text style={assetsDetail.assetsLeftTitle}>资产状态</Text>
+                    {
+                        this.props.navigation.state.params.confirm_status==1 &&
+                        <View style={assetsDetail.assetsOwner}>
+                            <Icon name='ios-checkmark-circle' size={20} color='#075591' style={{marginTop:-6,marginRight: 4}}/>
+                            <Text style={assetsDetail.assetsRightContent}>证实成功</Text>
+                        </View>
+                    }
+                    {
+                        this.props.navigation.state.params.confirm_status==2 &&
+                        <View style={assetsDetail.assetsOwner}>
+                            <Icon name='ios-close-circle' size={20} color='#CB4B4B' style={{marginTop:-4,marginRight: 4}}/>
+                            <Text style={assetsDetail.assetsRightContent}>证实失败</Text>
+                        </View>
+                    }
+                    {
+                        this.props.navigation.state.params.confirm_status==0 &&
+                        <View style={assetsDetail.assetsOwner}>
+                            <Icon name='ios-information-circle' size={20} color='#CB4B4B' style={{marginTop:-4,marginRight: 4}}/>
+                            <Text style={assetsDetail.assetsRightContent}>未证实</Text>
+                        </View>
+                    }
+                </View>
+                <View style={assetsDetail.assetsRowList}>
                     <Text style={assetsDetail.assetsLeftTitle}>当前所有者</Text>
                     <View style={assetsDetail.assetsOwner}>
                         <Image source={this.props.navigation.state.params.photo==null?require('../image/Avatar.png'):{uri:fentchUrl+this.props.navigation.state.params.photo}} style={assetsDetail.assetsOwnerPhoto}></Image>
@@ -138,18 +194,29 @@ export default class AssetsDetail extends React.Component {
                 </View>
                 <View style={assetsDetail.assetsRowList}>
                     <Text style={assetsDetail.assetsLeftTitle}>附件</Text>
-                    <Text style={[assetsDetail.assetsRightContent,assetsDetail.assetsFile]}>
-                        {/* <Icon name='md-document' size={20} style={{color:'#F28321'}}/> */}
-                            {this.props.navigation.state.params.filename==''?' 无附件': ' '+this.props.navigation.state.params.filename+' '} 
-                            {
-                                this.props.navigation.state.params.filename!=''&&
-                                <Icon name='md-cloud-download' size={20} style={{color:'#F28321'}} onPress={this.download.bind(this,this.props.navigation.state.params.asset_id)}/>
-                            }
+                    <View style={assetsDetail.assetsRightShowHistory}>
+                        <Text style={[assetsDetail.assetsRightContent,assetsDetail.assetsFile]}>
+                            {/* <Icon name='md-document' size={20} style={{color:'#F28321'}}/> */}
+                                {this.props.navigation.state.params.filename==''?' 无附件': ' '+this.props.navigation.state.params.filename+' '} 
+                                {
+                                    (this.props.navigation.state.params.filename!='' && this.props.navigation.state.params.enable_trans ) &&
+                                    <Icon name='md-cloud-download' size={20} style={{color:'#F28321'}} onPress={this.download.bind(this,this.props.navigation.state.params.asset_id)}/>
+                                }
                             
-                    </Text>
+                        </Text>
+                        {
+                            this.state.progressNum!='' &&
+                            <View style={assetsDetail.progress}>
+                                <Text style={{width:this.state.progressNum*100+'%',backgroundColor: '#F28321',height: 4}}></Text>
+                            </View>
+                        }
+                       
+                    </View>
+                    
                     {/* todo 下载附件 */}
                     {/* <Text >下载</Text> */}
                 </View>
+                
                 <View style={assetsDetail.assetsRowList}>
                     <Text style={assetsDetail.assetsLeftTitle}>创建时间</Text>
                     <View style={assetsDetail.assetsRightShowHistory}>
@@ -235,5 +302,9 @@ const assetsDetail = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
     },
-
+    progress:{
+        flex: 1,
+        backgroundColor: '#DEDEDE',
+        height: 4,
+    }
 })

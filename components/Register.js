@@ -19,7 +19,7 @@ import styles from '../style/style'
 import TouchableButton from './button'
 import Icon from 'react-native-vector-icons/Ionicons';
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class Register extends Component{
   constructor(props) {
     super(props);
@@ -63,9 +63,9 @@ export default class Register extends Component{
       var itemArr = [{value:this.state.userRealname,regexp:/^[\u4e00-\u9fa5a-zA-Z]{2,20}$/,errorMsg:'请输入姓名：2-20位字母或汉字'},
                     {value:this.state.username,regexp:/^[_a-zA-Z0-9]{2,20}$/,errorMsg:'请输入用户名：2-20位字母数字下划线'},
                     {value:this.state.userJob,regexp:/^[\u4e00-\u9fa5a-zA-Z]{1,20}$/,errorMsg:'请输入职位：1-20位字母或汉字'},
-                    {value:this.state.userPhone,regexp:/^0?(13[0-9]|15[012356789]|17[013678]|18[0-9]|14[57])[0-9]{8}$/,errorMsg:'请输入手机号码：例如：13812344321'},
+                    {value:this.state.userPhone,regexp:/^((\+?86)|(\(\+86\)))?(13[0-9]|15[012356789]|17[013678]|18[0-9]|14[57])[0-9]{8}$/,errorMsg:'请输入手机号码：例如：13812344321或者+8613812344321'},
                     {value:this.state.userEmail,regexp:/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/,errorMsg:'请输入邮箱：xxx@xxx.xxx'},]
-     
+                  
       var regexp = itemArr.every((item)=>{
         if(!item.regexp.test(item.value)){
           this.setState({
@@ -189,7 +189,7 @@ export default class Register extends Component{
          {
            this.state.stepIndex==1 &&
            <View style = {styles.registerContainer}>
-            <ScrollView style={styles.registerStepFirstBox}>
+            <ScrollView style={styles.registerStepFirstBox} showsVerticalScrollIndicator={true}>
               <View>
                 <Text style={styles.LoginTip}>姓名</Text>
                 <TextInput style={styles.loginInput} placeholderTextColor='#2E4663' returnKeyType='done'
@@ -225,9 +225,10 @@ export default class Register extends Component{
                   value={this.state.userEmail} 
                 ></TextInput>
               </View>
-              </ScrollView>
+              
               <TouchableButton title='下一步' onButtonPress = {this.onButtonPress.bind(this)}/>
               <Text style={styles.errorMsg}>{this.state.errorMsg}</Text>
+              </ScrollView>
            </View>
          }
          {

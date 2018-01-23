@@ -117,5 +117,10 @@ const assets = StyleSheet.create({
         paddingLeft: 10,
         borderRadius: 6,
     },
+    asset_confirm:{
+        paddingTop: 12,
+        fontSize: fontsize(16),
+        lineHeight:fontsize(24),
+    }
 });
 module.exports = assets;

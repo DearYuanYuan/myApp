@@ -9,7 +9,7 @@ import fontsize from './plug/fontSize'
 export default class TouchableButton extends React.Component {
     render() {
         return (
-            <TouchableHighlight style={button.buttonCover}>
+            <TouchableHighlight style={button.buttonCover} activeOpacity={1} underlayColor='#F28321'>
                 <Text style={button.textMsg} onPress = {this.props.onButtonPress.bind(this)} suppressHighlighting={true}>{this.props.title}</Text>
             </TouchableHighlight>
         );

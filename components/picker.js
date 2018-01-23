@@ -30,10 +30,10 @@ export default class Picker extends React.Component {
     
     render() {
         return (
-            <TouchableHighlight>
+            <TouchableHighlight onPress={this.props.showSelectPicker.bind(this)} activeOpacity={1} underlayColor='#fff'>
             <View style={styles.pickerCover}>
                 <View style={styles.pickerIconClick}>
-                    <Text style={styles.pickerValue}  onPress={this.props.showSelectPicker.bind(this)} >{this.props.selectOption}</Text>
+                    <Text style={styles.pickerValue}  >{this.props.selectOption}</Text>
                     <Icon name='ios-arrow-down-outline' size={20}/>
                 </View>
                 {

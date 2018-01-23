@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {StackNavigator,TabNavigator,TabBarBottom} from 'react-navigation'; 
+import SplashScreen from 'react-native-splash-screen'
 import $ from 'jquery'
 import Login from './Login'
 import Home from './Home'
@@ -101,7 +102,9 @@ export const Navigator = StackNavigator(
 })
 export default class App extends Component{
   
-  
+  componentDidMount(){
+    SplashScreen.hide();//关闭启动屏幕
+}
   render() {
     return (
       <Navigator />

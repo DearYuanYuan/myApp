@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Picker from './picker'
 import TouchableButton from './button'
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 //图片选择器
 var ImagePicker = require('react-native-image-picker');
 
@@ -268,9 +268,9 @@ export default class Settingusermsg extends React.Component {
               let source = { uri: 'data:image/jpeg;base64,' + response.data };
               let size = response.fileSize;
               //当图片大于250kb
-              if(response.fileSize/1024>250){
+              if(response.fileSize/1024/1024>10){
                 this.setState({
-                    fileSize:'头像大小为'+parseInt(response.fileSize/1024)+'kb,请选择250kb以内的头像',
+                    fileSize:'头像大小为'+parseInt(response.fileSize/1024/1024)+'M,请选择10M以内的头像',
                   });
               }else{
                 this.setState({

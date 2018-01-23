@@ -7,6 +7,7 @@ import {
     ScrollView,
     TextInput,
     StatusBar,
+    TouchableHighlight,
     ActivityIndicator,
     Alert
 } from 'react-native';
@@ -16,7 +17,7 @@ import Picker from './picker'
 import assets from '../style/assets'
 import styles from '../style/style'
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class TransAssets extends React.Component {
     constructor(props) {
         super(props);
@@ -51,6 +52,7 @@ export default class TransAssets extends React.Component {
             type:this.props.navigation.state.params.type,
             username:this.props.navigation.state.params.username,
             filename:this.props.navigation.state.params.filename,
+            photo:this.props.navigation.state.params.photo,
             tx_id:this.state.tx_id})
     }
     /*确认转移资产
@@ -131,13 +133,17 @@ export default class TransAssets extends React.Component {
                 <StatusBar barStyle={'default'} />
                 <View style={assetsDetail.assetsRowList}>
                     <Text style={assetsDetail.assetsLeftTitle}>目标用户</Text>
+                    
                     <View style={assetsDetail.assetsRightIpt}>
+                    <TouchableHighlight onPress={this.showSelectPicker.bind(this)} activeOpacity={1} underlayColor='#fff'>
                         <View style={styles.selectOtherCover}>
                             <Text style={styles.selectOtherIpt}
-                            onPress={this.showSelectPicker.bind(this)}>{this.state.transOwner}</Text>
+                            >{this.state.transOwner}</Text>
                             <Icon name='ios-arrow-forward-outline' size={20} />
                         </View>
+                    </TouchableHighlight>
                     </View>
+                    
                 </View>
                 <View style={assetsDetail.assetsRowList}>
                     <Text style={assetsDetail.assetsLeftTitle}>资产详情</Text>

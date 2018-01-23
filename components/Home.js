@@ -21,7 +21,7 @@ import TouchableButton from './button'
 import AssetsList from './Assets'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class Home extends Component{
   constructor(props) {
     super(props);
@@ -85,7 +85,7 @@ export default class Home extends Component{
   todo  资产交易列表点击显示资产信息
   asset,type,username,filename,time,asset_id,tx_id,enable_trans,job参数是从组件Assets.js传递来的
   */
-  showDealHistory(asset,type,username,filename,time,asset_id,tx_id,enable_trans,photo,job){
+  showDealHistory(asset,type,username,filename,time,asset_id,tx_id,enable_trans,photo,job,confirm_status){
     const {navigate} = this.props.navigation
     navigate('AssetsDetail',
             {asset:asset, //资产
@@ -98,6 +98,7 @@ export default class Home extends Component{
             enable_trans:enable_trans, //是否可以转移
             photo:photo,//用户头像
             userAssetsJob:job,
+            confirm_status:confirm_status,
             errorMsg:''
           })
   }

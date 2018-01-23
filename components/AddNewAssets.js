@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Picker from './picker'
 import TouchableButton from './button'
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 
 //图片选择器
 var ImagePicker = require('react-native-image-picker');
@@ -31,7 +31,7 @@ var options = {
     takePhotoButtonTitle: '',//是否可以拍照 
     chooseFromLibraryButtonTitle: '相册', 
     cameraType: '返回',
-    mediaType: '相册',
+    mediaType: 'mixed',
     // videoQuality: 'high', 
     // durationLimit: 10,
     // maxWidth: 600,
@@ -193,15 +193,16 @@ export default class AddNewAssets extends React.Component {
               alert("ImagePicker发生错误：" + response.error);
             }
             else {
-            //   let source = { uri: response.uri };
+              let source = { uri: response.uri };
               // You can also display the image using data: 转为二进制流
-              let source = { uri: 'data:image/jpeg;base64,' + response.data };
+            //   let source = { uri: 'data:image/jpeg;base64,' + response.data };
               let size = response.fileSize;
               let fileName = response.fileName
-              //当图片大于250kb
-              if(response.fileSize/1024>10){
+              //当图片大于10M
+
+              if(response.fileSize/(1024*1024)>10){
                 this.setState({
-                    fileSize:'文件大小为'+parseInt(response.fileSize/1024)+'kb,请选择10kb以内的文件',
+                    fileSize:'文件大小为'+parseInt(response.fileSize/(1024*1024))+'M,请选择10M以内的文件',
                   });
               }else{
                 this.setState({

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class AssetsHistory extends React.Component {
     constructor(props) {
         super(props);

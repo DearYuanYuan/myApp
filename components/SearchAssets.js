@@ -16,7 +16,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../style/style'
 import { NavigationActions } from 'react-navigation'
 import AssetsList from './Assets'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class SearchAssets extends React.Component {
     constructor(props) {
         super(props);

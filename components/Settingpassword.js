@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Picker from './picker'
 import TouchableButton from './button'
 import fontsize from './plug/fontSize'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class Settingpassword extends React.Component {
     constructor(props) {
         super(props);

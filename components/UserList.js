@@ -15,7 +15,7 @@ import fontsize from './plug/fontSize'
 import Icon from 'react-native-vector-icons/Ionicons'
 import styles from '../style/style'
 import { NavigationActions } from 'react-navigation'
-let fentchUrl = 'http://139.196.253.89:8080'
+let fentchUrl = 'http://140.143.202.114:8080'
 export default class UserList extends React.Component {
     constructor(props) {
         super(props);
@@ -40,6 +40,7 @@ export default class UserList extends React.Component {
             type:this.props.navigation.state.params.type,
             username:this.props.navigation.state.params.username,
             filename:this.props.navigation.state.params.filename,
+            photo:this.props.navigation.state.params.photo,
             tx_id:this.props.navigation.state.params.tx_id})
     }
     static navigationOptions = ({navigation,screenProps})=>({

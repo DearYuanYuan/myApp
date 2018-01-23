@@ -82,8 +82,8 @@ var styles = StyleSheet.create({
     headTopHome:{
         // marginTop:-20,
         flexDirection:'row',
-        paddingLeft: 20,
-        paddingRight: 20,
+        // paddingLeft: 20,
+        // paddingRight: 20,
         position: 'relative',
     },
     errorMsg:{
@@ -96,7 +96,7 @@ var styles = StyleSheet.create({
     leftUserImg:{
         position: 'absolute',
         top:-20,
-        left:20,
+        left:12,
         width:100,
         height:100,
         borderRadius:50,
@@ -113,6 +113,7 @@ var styles = StyleSheet.create({
         flex: 1,
         color: '#999',
         paddingTop: 20,
+        marginRight: 12,
     },
     homeUsername:{
         fontSize: fontsize(16),
